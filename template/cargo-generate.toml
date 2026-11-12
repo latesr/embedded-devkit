@@ -1,0 +1,8 @@
+[template]
+# Only these files hold placeholders. Every other file is copied as it is, so the braces in Rust format strings
+# and in the CI workflow's expressions are never read as placeholders.
+include = ["Cargo.toml", "AGENTS.md", "REQUIREMENTS.md"]
+
+[placeholders.description]
+type = "string"
+prompt = "One sentence that says what the project is"

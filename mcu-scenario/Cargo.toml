@@ -1,0 +1,22 @@
+[package]
+name = "mcu-scenario"
+version = "0.1.0"
+description = "Scenario tests for firmware with an mcu-console console: build it, flash it once, reset it between tests and drive its console"
+readme = "README.md"
+# mcu-run's MSRV, which its pinned probe-rs sets.
+rust-version = "1.95"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords = ["embedded", "testing", "hil", "console", "probe-rs"]
+categories = ["embedded", "development-tools::testing"]
+
+[dependencies]
+mcu-run = { path = "../mcu-run" }
+# Reads the artifact path out of cargo's JSON messages.
+serde_json = "1"
+# Lists this host's interfaces, for host_address.
+if-addrs = "0.15"
+
+[lints]
+workspace = true

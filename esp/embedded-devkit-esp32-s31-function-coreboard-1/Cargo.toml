@@ -1,0 +1,110 @@
+[package]
+name = "embedded-devkit-esp32-s31-function-coreboard-1"
+description = "The embedded-devkit test platform for the ESP32-S31-Function-CoreBoard-1 v1.0: bring-up, the boot counter and the console transport"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/latesr/embedded-devkit"
+publish = false
+# The examples are shared with the other ESP32 board crates, in `../examples/`. `examples/board.rs` names this
+# board for them, and is not an example.
+autoexamples = false
+
+# The tests run on the board, through the smoke, ethernet and extensions test binaries. Nothing here runs under
+# the host test harness.
+[lib]
+test = false
+doctest = false
+
+[[example]]
+name = "console"
+path = "../examples/console.rs"
+test = false
+
+[[example]]
+name = "console_async"
+path = "../examples/console_async.rs"
+test = false
+required-features = ["embassy"]
+
+[[example]]
+name = "console_ethernet"
+path = "../examples/console_ethernet.rs"
+test = false
+required-features = ["ethernet"]
+
+[[example]]
+name = "console_wifi"
+path = "../examples/console_wifi.rs"
+test = false
+required-features = ["wifi"]
+
+[[example]]
+name = "exit"
+path = "../examples/exit.rs"
+test = false
+
+[[test]]
+name = "smoke"
+harness = false
+
+[[test]]
+name = "ethernet"
+harness = false
+required-features = ["ethernet"]
+
+[[test]]
+name = "extensions"
+harness = false
+
+[features]
+# Starts esp-rtos and Embassy, and gives the console an async transport (B-3, B-4).
+embassy = ["embedded-devkit-esp/embassy", "dep:esp-rtos"]
+# Wi-Fi, an embassy-net stack over it, and mcu-console-net's Wifi trait (B-7, B-15, B-19).
+wifi = ["embassy", "embedded-devkit-esp/wifi", "dep:mcu-console-net", "dep:static_cell"]
+# mcu-console-net's `net iperf` in the Wi-Fi and Ethernet consoles, a bring-up and test command (N-17).
+iperf = ["mcu-console-net?/iperf"]
+# Ethernet over the board's RGMII PHY, an embassy-net stack over it, and mcu-console-net's commands (B-7).
+ethernet = [
+    "embassy",
+    "embedded-devkit-esp/ethernet",
+    "dep:embassy-executor",
+    "dep:embassy-net",
+    "dep:embassy-net-driver",
+    "dep:embassy-time",
+    "dep:mcu-console-net",
+    "dep:smoltcp",
+    "dep:static_cell",
+]
+# mcu-console-perf's `perf run` in the Ethernet console, and its `lock` command for the timed mutex. Only the
+# application turns it on, never a library (P-6).
+perf = ["embedded-devkit-esp/perf", "dep:embassy-sync", "dep:mcu-console-perf"]
+
+[dependencies]
+defmt = "1.1"
+embassy-executor = { version = "0.10", optional = true }
+embassy-net = { workspace = true, optional = true }
+embassy-net-driver = { version = "0.2", optional = true }
+embassy-sync = { version = "0.8", optional = true }
+embassy-time = { version = "0.5", optional = true }
+embedded-devkit-esp = { workspace = true, features = ["esp32s31"] }
+esp-hal = { workspace = true, features = ["esp32s31"] }
+# esp-hal's main macro names esp_rtos in an async main, so an application with one depends on it itself.
+esp-rtos = { workspace = true, features = ["esp32s31"], optional = true }
+mcu-console = { workspace = true }
+mcu-console-net = { workspace = true, optional = true }
+mcu-console-perf = { workspace = true, optional = true }
+smoltcp = { workspace = true, optional = true }
+static_cell = { version = "2", optional = true }
+
+[dev-dependencies]
+embassy-executor = "0.10"
+embassy-time = "0.5"
+embedded-io = "0.7"
+# The async tests run on esp-rtos's executor, which the test names.
+embedded-test = { version = "0.7", default-features = false, features = ["semihosting", "defmt", "embassy-010", "external-executor"] }
+semihosting = "0.1"
+
+[lints]
+workspace = true

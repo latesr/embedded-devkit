@@ -1,0 +1,57 @@
+# The ESP32 board crates. They are one workspace apart from the devkit's, because they build for the
+# microcontrollers. One workspace keeps both chips on one esp-hal: one revision, one lock file. Run cargo in a board
+# crate's folder, where its rust-toolchain.toml and .cargo/config.toml choose its target.
+[workspace]
+resolver = "3"
+members = [
+    "embedded-devkit-esp",
+    "embedded-devkit-esp32-c5-devkitc-1",
+    "embedded-devkit-esp32-s31-function-coreboard-1",
+]
+
+# The esp-hal revision both chips use. The family crate's chip feature picks the chip. It is the commit of the tag
+# integration-2026-11-12 on latesr/esp-hal, which holds the changes the devkit needs before esp-hal releases them. The
+# rev names the commit, because the integration branch is rebased, so its tip changes. Every crate from the esp-hal
+# repository must come from one revision, because two copies of esp-rom-sys cannot link.
+[workspace.dependencies]
+# The stack features mcu-console-net's commands use, for the Wi-Fi and the Ethernet stacks alike.
+embassy-net = { version = "0.9.1", features = ["proto-ipv4", "medium-ethernet", "tcp", "udp", "dns", "icmp", "dhcpv4"] }
+embedded-devkit-esp = { path = "embedded-devkit-esp" }
+esp-alloc = { git = "https://github.com/latesr/esp-hal", rev = "6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186" }
+esp-bootloader-esp-idf = { git = "https://github.com/latesr/esp-hal", rev = "6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186" }
+esp-hal = { git = "https://github.com/latesr/esp-hal", rev = "6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186", features = ["unstable", "defmt"] }
+esp-radio = { git = "https://github.com/latesr/esp-hal", rev = "6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186", features = ["wifi", "unstable", "defmt"] }
+esp-rtos = { git = "https://github.com/latesr/esp-hal", rev = "6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186", features = ["embassy", "defmt"] }
+mcu-console = { path = "../mcu-console" }
+mcu-console-net = { path = "../mcu-console-net" }
+mcu-console-perf = { path = "../mcu-console-perf" }
+# embassy-net builds smoltcp without automatic echo replies, so the board would not answer pings (B-20). A network
+# feature that depends on this turns them on through feature unification.
+smoltcp = { version = "0.13", default-features = false, features = ["auto-icmp-echo-reply"] }
+
+[profile.release]
+debug = true
+
+# With code in PSRAM, every crate must build at opt-level 2 or 3. Below 2, the start-up can link an
+# out-of-line copy of a `core` helper from a crate built at opt-level 0. esp-radio's build script also warns below 2.
+[profile.dev]
+opt-level = 2
+
+# The devkit workspace's lints, which a crate outside that workspace cannot inherit. unsafe_code is deny rather than
+# forbid, so that the boot counter can allow it at its one site.
+[workspace.lints.rust]
+unsafe_code = "deny"
+missing_docs = "deny"
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(rust_analyzer)"] }
+
+[workspace.lints.rustdoc]
+broken_intra_doc_links = "deny"
+
+[workspace.lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+todo = "deny"
+unimplemented = "deny"
+indexing_slicing = "deny"
+arithmetic_side_effects = "deny"

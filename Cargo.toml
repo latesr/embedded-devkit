@@ -1,0 +1,37 @@
+[workspace]
+resolver = "3"
+members = ["mcu-console", "mcu-console-net", "mcu-console-perf", "mcu-run", "mcu-scenario", "scenario-tests", "xtask"]
+# The template is copied into a new repo, where it is its own workspace. The board crates are in workspaces of their
+# own, because they build for microcontrollers. esp/ holds the ESP32 ones and stm32/ the STM32 ones.
+exclude = ["template", "esp", "stm32"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.91"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/latesr/embedded-devkit"
+
+[workspace.metadata.devkit]
+boards = [
+    "esp/embedded-devkit-esp32-c5-devkitc-1",
+    "esp/embedded-devkit-esp32-s31-function-coreboard-1",
+    "stm32/embedded-devkit-nucleo-h7s3l8",
+]
+families = ["esp/embedded-devkit-esp"]
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "deny"
+
+[workspace.lints.rustdoc]
+broken_intra_doc_links = "deny"
+
+[workspace.lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+todo = "deny"
+unimplemented = "deny"
+indexing_slicing = "deny"
+arithmetic_side_effects = "deny"

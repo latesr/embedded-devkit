@@ -1,0 +1,36 @@
+# The STM32 board crates. They are one workspace apart from the devkit's, because they build for the
+# microcontrollers. Run cargo in a board crate's folder, where its rust-toolchain.toml and .cargo/config.toml choose
+# its target.
+[workspace]
+resolver = "3"
+members = ["embedded-devkit-nucleo-h7s3l8"]
+
+[workspace.dependencies]
+mcu-console = { path = "../mcu-console" }
+
+[profile.release]
+debug = true
+
+# The start-up code runs before the external flash is readable, so everything it calls must be inlined into it. The
+# register accessors are #[inline(always)], which a dev build honours only with optimisation on.
+[profile.dev]
+opt-level = "s"
+
+# The devkit workspace's lints, which a crate outside that workspace cannot inherit. unsafe_code is deny rather than
+# forbid, so that the start-up code and the boot counter can allow it.
+[workspace.lints.rust]
+unsafe_code = "deny"
+missing_docs = "deny"
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(rust_analyzer)"] }
+
+[workspace.lints.rustdoc]
+broken_intra_doc_links = "deny"
+
+[workspace.lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+todo = "deny"
+unimplemented = "deny"
+indexing_slicing = "deny"
+arithmetic_side_effects = "deny"

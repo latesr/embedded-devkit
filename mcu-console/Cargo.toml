@@ -1,0 +1,27 @@
+[package]
+name = "mcu-console"
+version = "0.1.0"
+description = "A line console for a microcontroller: a sans-I/O core with blocking and async drivers"
+readme = "README.md"
+rust-version = "1.91"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords = ["embedded", "no-std", "console", "embedded-io"]
+categories = ["embedded", "no-std", "no-std::no-alloc"]
+
+[package.metadata.devkit]
+cross = true
+
+[dependencies]
+embassy-futures = "0.1"
+embedded-hal = "1"
+embedded-hal-async = "1"
+embedded-io = "0.7"
+embedded-io-async = "0.7"
+
+[dev-dependencies]
+proptest = "1"
+
+[lints]
+workspace = true

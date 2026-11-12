@@ -1,0 +1,4 @@
+name: broken
+variants:
+- name: broken-chip
+  cores: not a list

@@ -1,0 +1,90 @@
+[package]
+name = "embedded-devkit-esp"
+description = "What the embedded-devkit ESP32 board crates share: bring-up, the boot counter, the console transport, info, Embassy, Wi-Fi and Ethernet"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/latesr/embedded-devkit"
+publish = false
+
+# A board crate turns on one chip feature. The chip features exclude each other.
+[package.metadata.devkit]
+chips = { esp32c5 = "riscv32imac-unknown-none-elf", esp32s31 = "riscv32imafc-unknown-none-elf" }
+
+# The board crates run the tests on the board. Nothing here runs under the host test harness.
+[lib]
+test = false
+doctest = false
+
+[features]
+esp32c5 = [
+    "esp-bootloader-esp-idf/esp32c5",
+    "esp-hal/esp32c5",
+    "esp-radio?/esp32c5",
+    "esp-rtos?/esp32c5",
+]
+esp32s31 = [
+    "esp-bootloader-esp-idf/esp32s31",
+    "esp-hal/esp32s31",
+    "esp-radio?/esp32s31",
+    "esp-rtos?/esp32s31",
+]
+# Starts esp-rtos and Embassy, and gives the console an async transport (B-3, B-4).
+embassy = ["dep:esp-rtos"]
+# Wi-Fi through esp-radio, an embassy-net stack over it, and mcu-console-net's Wifi trait (B-7, B-15, B-19). It pulls in
+# the radio blobs and a heap.
+wifi = [
+    "embassy",
+    "esp-rtos/esp-radio",
+    "dep:embassy-executor",
+    "dep:embassy-futures",
+    "dep:embassy-net",
+    "dep:embassy-net-driver",
+    "dep:embassy-sync",
+    "dep:embassy-time",
+    "dep:esp-alloc",
+    "dep:esp-radio",
+    "dep:mcu-console-net",
+    "dep:smoltcp",
+    "dep:static_cell",
+]
+# Ethernet over the MAC, for the ESP32-S31 only, and an embassy-net stack over it (B-7).
+ethernet = [
+    "embassy",
+    "dep:embassy-executor",
+    "dep:embassy-net",
+    "dep:embassy-net-driver",
+    "dep:embassy-time",
+    "dep:mcu-console-net",
+    "dep:static_cell",
+]
+# mcu-console-perf's figures, for the ESP32-S31 only. Only the application turns it on, never a library (P-6).
+perf = ["dep:embassy-sync", "dep:mcu-console-perf", "dep:riscv", "esp-alloc?/internal-heap-stats"]
+
+[dependencies]
+critical-section = "1.2"
+defmt = "1.1"
+defmt-rtt = "1.3"
+embassy-executor = { version = "0.10", optional = true }
+embassy-futures = { version = "0.1", optional = true }
+embassy-net = { workspace = true, optional = true }
+embassy-net-driver = { version = "0.2", optional = true }
+embassy-sync = { version = "0.8", optional = true }
+embassy-time = { version = "0.5", optional = true }
+embedded-io = "0.7"
+esp-alloc = { workspace = true, optional = true }
+esp-bootloader-esp-idf = { workspace = true }
+esp-hal = { workspace = true }
+esp-radio = { workspace = true, optional = true }
+esp-rtos = { workspace = true, optional = true }
+mcu-console = { workspace = true }
+mcu-console-net = { workspace = true, optional = true }
+mcu-console-perf = { workspace = true, optional = true }
+riscv = { version = "0.15", optional = true }
+semihosting = { version = "0.1", features = ["stdio", "panic-handler"] }
+smoltcp = { workspace = true, optional = true }
+static_cell = { version = "2", optional = true }
+
+[lints]
+workspace = true

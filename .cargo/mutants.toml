@@ -1,0 +1,55 @@
+# Files that only start other programs have no unit tests, or tests of their argument parsing alone. Their check
+# is the output they produce, so a mutant in them survives every test run and says nothing about coverage.
+exclude_globs = [
+    "xtask/src/main.rs",
+    "xtask/src/shared/hooks.rs",
+    "xtask/src/shared/mutants.rs",
+    "mcu-run/src/main.rs",
+]
+
+# Functions that only talk to the attached hardware through probe-rs. A host test has no probe, so a mutant in
+# them survives every test run. The hardware runs recorded on the board pages are their check.
+#
+# A console driver's run loops until step fails, so a step that always succeeds can only time out.
+exclude_re = [
+    "replace (attached|is_attached|wait_for_board|unless_gone|ports|port|check_free|open_port|wait_for_port|Runner::(run|test|is_test_binary|read_elf|start|attach|reattach|flash|download)|Output<'e>::(new|restart|follow|run_test|poll|after_reset|halt|answer)|defmt_line) -> ",
+    " in (attached|is_attached|wait_for_board|unless_gone|ports|port|open_port|wait_for_port|Runner::(run|test|is_test_binary|read_elf|start|attach|reattach|flash|download)|Output<'e>::(new|restart|follow|run_test|poll|after_reset|halt|answer)|defmt_line)$",
+    "::step -> Result<\\(\\), Stop<R::Error>> with Ok\\(\\(\\)\\)",
+    # The functions that open a probe and read its JTAG chain, and those that only call them. choose, word and
+    # chip_by_idcode hold the decisions, and are tested.
+    "mcu-run/src/detect\\.rs:[0-9:]+ (replace (debugs|open|idcodes|with_chip) -> |.* in (debugs|open|idcodes|with_chip)$)",
+    "mcu-run/src/(board|runner)\\.rs:[0-9:]+ replace (attached_with_chips|Runner::board) -> ",
+    # mcu-scenario's functions that start firmware on the board, or that only run cargo. cargo::command and
+    # cargo::artifact hold the build's decisions, and are tested.
+    "mcu-scenario/src/lib\\.rs:[0-9:]+ (replace (Firmware::(console|fresh_console)|board|build) -> |.* in (Firmware::(console|fresh_console)|board|build)$)",
+    # send_until only hands a started console's send and the clock to poll, which holds the decisions and is tested.
+    "mcu-scenario/src/console\\.rs:[0-9:]+ (replace Console::send_until -> |.* in Console::send_until$)",
+    # word sets each bit at its own position, so OR and XOR give the same word.
+    "mcu-run/src/detect\\.rs:[0-9:]+ replace \\| with \\^ in word$",
+    # cargo xtask hil's run only prints and starts the commands that steps lists, and steps is tested. The file is
+    # named, so the shared modules' run functions stay mutated.
+    "xtask/src/hil\\.rs:[0-9:]+ replace run -> ",
+    "xtask/src/hil\\.rs:[0-9:]+ .* in run$",
+    # A board without an instruction count and one whose count never moves both retire no instructions in a
+    # window, and perf run writes `perf_cpi: none` for either, so a constant in place of the default's None is the
+    # same behaviour.
+    "mcu-console-perf/src/lib\\.rs:[0-9:]+ replace Platform::instructions -> Option<u64> with Some\\(",
+    # lock_held_without_cas is built only for a core without compare-and-swap, which the host is not, so no host
+    # test can run it.
+    "mcu-console-perf/src/lib\\.rs:[0-9:]+ (replace|.* in) lock_held_without_cas",
+    # wifi_devices only runs networksetup on macOS or reads /sys/class/net elsewhere, and wifi_ports and
+    # wireless_devices, which read their output, are tested.
+    "xtask/src/shared/host\\.rs:[0-9:]+ replace wifi_devices -> ",
+    # The same functions in mcu-scenario's copy, and host_address and find, which only read this host's
+    # interfaces and hand them to choose, which is tested.
+    "mcu-scenario/src/host\\.rs:[0-9:]+ (replace (wifi_devices|find|host_address) -> |.* in (find|host_address)$)",
+    # takes_push only runs the repo's `cargo xtask check --help`, and install only hands its answer to write_hooks,
+    # which is tested.
+    "xtask/src/shared/hooks\\.rs:[0-9:]+ (replace (takes_push|install) -> |.* in (takes_push|install)$)",
+    # cargo xtask iperf-server's run only binds, prints its two lines and waits, and Bound and result_line are
+    # tested.
+    "xtask/src/iperf\\.rs:[0-9:]+ replace run -> ",
+    # cargo xtask check's run and step only start the cargo commands that the tested functions list and choose.
+    "xtask/src/check\\.rs:[0-9:]+ replace (run|step) -> ",
+    "xtask/src/check\\.rs:[0-9:]+ .* in run$",
+]

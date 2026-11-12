@@ -1,0 +1,17 @@
+[package]
+name = "scenario-tests"
+description = "Host tests that drive the board crates' firmware through mcu-run and the console. Not published."
+publish = false
+version.workspace = true
+edition.workspace = true
+# mcu-run's MSRV, which its pinned probe-rs sets.
+rust-version = "1.95"
+license.workspace = true
+
+[dev-dependencies]
+addr2line = { version = "0.27.1", default-features = false, features = ["loader", "rustc-demangle"] }
+mcu-run = { path = "../mcu-run" }
+mcu-scenario = { path = "../mcu-scenario" }
+
+[lints]
+workspace = true

@@ -1,0 +1,47 @@
+[package]
+name = "mcu-run"
+version = "0.1.0"
+description = "Flashes a microcontroller board, runs the firmware and drives its console from the host"
+readme = "README.md"
+rust-version = "1.95"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords = ["embedded", "probe-rs", "rtt", "defmt", "testing"]
+categories = ["embedded", "development-tools::testing"]
+
+# The command is `mcu`, as in `mcu run` and `mcu list`. The crate keeps the name of its library.
+[[bin]]
+name = "mcu"
+path = "src/main.rs"
+
+[dependencies]
+# probe-rs `master` at 2a8777bc, until a release includes it: it flashes an ESP32 about 30% faster than 0.32.0, holds
+# the ESP32-S31 flash algorithm, leaves the S31 running when a session ends, and gives the STM32H7S3L8 its 64 KB of
+# DTCM. It needs Rust 1.95.
+probe-rs = { git = "https://github.com/probe-rs/probe-rs", rev = "2a8777bc7343c99cb7eaba33e31ea43389aa6ac7" }
+probe-rs-espressif = { git = "https://github.com/probe-rs/probe-rs", rev = "2a8777bc7343c99cb7eaba33e31ea43389aa6ac7" }
+# The flash mode type of probe-rs-espressif's IdfLoader, at the version it depends on.
+espflash = { version = "4.7", default-features = false }
+# defmt-decoder puts its whole API behind this feature.
+defmt-decoder = { version = "1", features = ["unstable"] }
+# Without libudev, the Linux build reads the USB IDs and serial numbers from sysfs and needs no system package.
+serialport = { version = "4.10", default-features = false }
+# Reads the embedded-test symbols out of the ELF.
+object = { version = "0.40", default-features = false, features = ["elf", "read_core", "std"] }
+# The ID of an ESP-IDF image, which espflash takes from the SHA-256 of the ELF file.
+sha2 = "0.11"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# The binary.
+clap = { version = "4", features = ["derive", "env"] }
+crossterm = "0.29"
+
+[dev-dependencies]
+# The tests build a small ELF with embedded-test symbols in it.
+object = { version = "0.40", default-features = false, features = ["elf", "read_core", "std", "write"] }
+# The protocol test checks that the host speaks the console's version.
+mcu-console = { path = "../mcu-console" }
+
+[lints]
+workspace = true

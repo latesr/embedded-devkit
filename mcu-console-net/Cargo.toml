@@ -1,0 +1,43 @@
+[package]
+name = "mcu-console-net"
+version = "0.1.0"
+description = "Network commands for mcu-console: address, DNS, ping, TCP connect latency, iperf 2 throughput and Wi-Fi, over embassy-net"
+readme = "README.md"
+rust-version = "1.91"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords = ["embedded", "no-std", "console", "embassy-net", "wifi"]
+categories = ["embedded", "no-std", "no-std::no-alloc", "network-programming"]
+
+[package.metadata.devkit]
+cross = true
+
+[dependencies]
+embassy-net = { version = "0.9.1", features = ["proto-ipv4", "medium-ethernet", "tcp", "udp", "dns", "icmp", "dhcpv4"] }
+embassy-futures = "0.1"
+embassy-time = "0.5"
+# embedded-iperf2 is not on crates.io yet, so it comes from GitHub. mcu-console-net cannot be published before
+# embedded-iperf2 is. The rev must match xtask's.
+embedded-iperf2 = { git = "https://github.com/latesr/embedded-iperf2", rev = "f24b0bf82857881de376fcbcee267c18d6628fae", version = "0.1.0", features = ["embassy-net"], optional = true }
+mcu-console = { path = "../mcu-console" }
+# smoltcp keeps one DNS result and asks one resolver unless these raise the limits. Three resolvers match the
+# three a DHCP lease can give embassy-net's StaticConfigV4.
+smoltcp = { version = "0.13", default-features = false, features = ["dns-max-result-count-4", "dns-max-server-count-3"] }
+
+[features]
+# `net iperf`, a bring-up and test command that a production build leaves out (N-17).
+iperf = ["dep:embedded-iperf2"]
+
+[dev-dependencies]
+# The far end of the host tests answers pings the way a host on a real network does. embassy-net builds smoltcp
+# without it.
+smoltcp = { version = "0.13", default-features = false, features = ["auto-icmp-echo-reply"] }
+embassy-futures = "0.1"
+embassy-net-driver = "0.2"
+embassy-time = { version = "0.5", features = ["std", "generic-queue-64"] }
+embassy-time-driver = "0.2"
+heapless = "0.9"
+
+[lints]
+workspace = true

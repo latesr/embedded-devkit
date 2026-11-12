@@ -1,0 +1,17 @@
+[build]
+target = "riscv32imac-unknown-none-elf"
+
+[target.riscv32imac-unknown-none-elf]
+runner = "mcu run"
+rustflags = [
+    "-C", "link-arg=-Tembedded-test.x",
+    "-C", "link-arg=-Tdefmt.x",
+    "-C", "link-arg=-Tlinkall.x",
+    "-C", "link-arg=-Tmcu-run.x",
+    "-C", "force-frame-pointers",
+]
+
+[env]
+DEFMT_LOG = "info"
+# A standard IP MTU of 1500, which is a frame of 1514 bytes. esp-radio's default of 1492 counts the frame (B-15).
+ESP_RADIO_CONFIG_WIFI_MTU = "1514"
