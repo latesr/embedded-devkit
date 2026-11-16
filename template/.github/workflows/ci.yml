@@ -7,18 +7,18 @@ on:
   pull_request:
   schedule:
     - cron: "0 3 * * *"
-  # Runs the nightly job by hand, such as to check a fix to it.
+  # A person can start the nightly job from the Actions page, such as to check a fix to it.
   workflow_dispatch:
 
 # No job writes to the repo.
 permissions:
   contents: read
 
-# A new push to a pull request makes its older run stale. A run on main is never cancelled, so each commit keeps
-# its result.
+# A new push to a pull request cancels the pull request's older run. Every other run has a group of its own, because
+# GitHub holds only one pending run per group, and a newer run would cancel it.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: true
 
 env:
   CARGO_TERM_COLOR: always
