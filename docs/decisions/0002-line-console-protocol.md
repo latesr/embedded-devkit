@@ -14,14 +14,13 @@ A library's test firmware needs an interface that a host test uses to run comman
 - Each driver owns its transport and the echo, so the property tests run on the core alone, with the input split at every point.
 - `Commands` is one async trait. The blocking driver polls the same future with an empty waker, so an application writes each command once, and either driver runs it.
 - A tuple composes command sets, so the board crate's and the application's commands do not depend on each other.
-- A library's console commands are their own crate, `mcu-console-<library>`, so the library does not depend on mcu-console.
+- A library's console commands go in their own crate, so the library does not depend on `mcu-console`.
 - A command watches for the request to stop through its `Cancel` handle. The request is not tied to the Ctrl-C byte, so another transport, such as a NATS console, can raise it.
 
 ## Rejected
 
 - **A blocking trait and an async trait for commands.** An application would write each command twice, or choose one driver for every command.
 - **The GNU build ID on every chip.** espflash writes only program data into an ESP32 image, so the note never reaches the chip.
-- **`<library>-console`.** A search for `mcu-console` would not find it.
 - **A hash of the flash that the firmware makes at boot.** Each boot would take longer, and the host would need the image layout to make the same hash.
 
 ## Consequences

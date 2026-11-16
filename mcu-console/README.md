@@ -8,6 +8,10 @@ A line console for a microcontroller. The application supplies its commands, and
 
 The crate documentation states the line grammar and how an application connects the console to its transport and commands. The requirements it meets are K-1 to K-26 in the [embedded-devkit requirements](../REQUIREMENTS.md).
 
+## Commands for a library
+
+A library's console commands go in their own crate, so the library does not depend on `mcu-console`. Name the crate `mcu-console-<library>`, such as `mcu-console-nats`, so that a search for `mcu-console` finds it. A name such as `<library>-console` does not appear in that search.
+
 ## Licence
 
 MIT or Apache-2.0, at your option.
