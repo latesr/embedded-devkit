@@ -39,8 +39,8 @@ embassy-crypto-rustcrypto = { git = "https://github.com/embassy-rs/embassy", rev
     "embassy-crypto-ed25519",
 ] }
 # The same esp-hal commit as the board crates, from esp/Cargo.toml.
-esp-bootloader-esp-idf = { git = "https://github.com/latesr/esp-hal", rev = "6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186", features = ["esp32s31"] }
-esp-hal = { git = "https://github.com/latesr/esp-hal", rev = "6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186", features = ["esp32s31", "unstable", "defmt"] }
+esp-bootloader-esp-idf = { git = "https://github.com/latesr/esp-hal", rev = "828059d4276ed62b48f2e95a04106fc89fda17a0", features = ["esp32s31"] }
+esp-hal = { git = "https://github.com/latesr/esp-hal", rev = "828059d4276ed62b48f2e95a04106fc89fda17a0", features = ["esp32s31", "unstable", "defmt"] }
 semihosting = { version = "0.1", features = ["stdio", "panic-handler"] }
 
 [dev-dependencies]
@@ -48,7 +48,7 @@ semihosting = { version = "0.1", features = ["stdio", "panic-handler"] }
 crypto-bigint = { version = "0.7.5", default-features = false }
 embedded-test = { version = "0.7", default-features = false, features = ["semihosting", "defmt"] }
 # The rsa crate needs a heap. The test logs the heap's peak use.
-esp-alloc = { git = "https://github.com/latesr/esp-hal", rev = "6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186", features = ["esp32s31", "internal-heap-stats"] }
+esp-alloc = { git = "https://github.com/latesr/esp-hal", rev = "828059d4276ed62b48f2e95a04106fc89fda17a0", features = ["esp32s31", "internal-heap-stats"] }
 hex-literal = "1"
 # The RSA verify that embedded-tls's `rsa` feature uses, at its version.
 rsa = { version = "0.9.9", default-features = false }

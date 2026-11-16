@@ -802,7 +802,7 @@ checksum = "00d174d5400e5e8fd687ad1049e2f578285fa914201b1af7e8b112a4546bd826"
 [[package]]
 name = "esp-alloc"
 version = "0.11.0"
-source = "git+https://github.com/latesr/esp-hal?rev=6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186#6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186"
+source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
 dependencies = [
  "allocator-api2",
  "document-features",
@@ -817,7 +817,7 @@ dependencies = [
 [[package]]
 name = "esp-bootloader-esp-idf"
 version = "0.6.0"
-source = "git+https://github.com/latesr/esp-hal?rev=6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186#6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186"
+source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
 dependencies = [
  "document-features",
  "esp-config",
@@ -833,7 +833,7 @@ dependencies = [
 [[package]]
 name = "esp-config"
 version = "0.8.0"
-source = "git+https://github.com/latesr/esp-hal?rev=6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186#6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186"
+source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
 dependencies = [
  "document-features",
  "esp-metadata-generated",
@@ -845,7 +845,7 @@ dependencies = [
 [[package]]
 name = "esp-hal"
 version = "1.2.0"
-source = "git+https://github.com/latesr/esp-hal?rev=6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186#6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186"
+source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
 dependencies = [
  "bitfield",
  "bytemuck",
@@ -909,7 +909,7 @@ dependencies = [
 [[package]]
 name = "esp-hal-procmacros"
 version = "0.23.0"
-source = "git+https://github.com/latesr/esp-hal?rev=6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186#6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186"
+source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
 dependencies = [
  "document-features",
  "proc-macro-crate",
@@ -922,12 +922,12 @@ dependencies = [
 [[package]]
 name = "esp-metadata-generated"
 version = "0.6.0"
-source = "git+https://github.com/latesr/esp-hal?rev=6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186#6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186"
+source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
 
 [[package]]
 name = "esp-riscv-rt"
 version = "0.15.0"
-source = "git+https://github.com/latesr/esp-hal?rev=6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186#6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186"
+source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
 dependencies = [
  "defmt 1.2.0",
  "document-features",
@@ -938,7 +938,7 @@ dependencies = [
 [[package]]
 name = "esp-rom-sys"
 version = "0.1.5"
-source = "git+https://github.com/latesr/esp-hal?rev=6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186#6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186"
+source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
 dependencies = [
  "document-features",
  "esp-metadata-generated",
@@ -948,7 +948,7 @@ dependencies = [
 [[package]]
 name = "esp-sync"
 version = "0.3.0"
-source = "git+https://github.com/latesr/esp-hal?rev=6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186#6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186"
+source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
 dependencies = [
  "defmt 1.2.0",
  "document-features",
@@ -2173,7 +2173,7 @@ dependencies = [
 [[package]]
 name = "xtensa-lx"
 version = "0.13.0"
-source = "git+https://github.com/latesr/esp-hal?rev=6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186#6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186"
+source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
 dependencies = [
  "critical-section",
 ]
@@ -2181,7 +2181,7 @@ dependencies = [
 [[package]]
 name = "xtensa-lx-rt"
 version = "0.23.0"
-source = "git+https://github.com/latesr/esp-hal?rev=6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186#6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186"
+source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
 dependencies = [
  "defmt 1.2.0",
  "document-features",
@@ -2192,7 +2192,7 @@ dependencies = [
 [[package]]
 name = "xtensa-lx-rt-proc-macros"
 version = "0.5.0"
-source = "git+https://github.com/latesr/esp-hal?rev=6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186#6c4cc1b31b48a24ad6b38032e9f07ff1e3c35186"
+source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
 dependencies = [
  "proc-macro2",
  "quote",
