@@ -67,4 +67,4 @@ jobs:
       - name: Check every feature combination
         run: cargo hack check --workspace --feature-powerset --no-dev-deps
       - name: Mutation test every crate
-        run: cargo mutants --workspace
+        run: cargo xtask mutants --all
