@@ -8,6 +8,9 @@ use std::process::Command;
 
 /// Writes the diff to `target/mutants.diff`, then runs cargo-mutants over it in each package that it touches. With
 /// `staged`, the diff is the staged changes against `HEAD`. Without it, the diff is the working tree against `base`.
+// It only starts cargo-mutants and returns its result. packages, touched and command hold the decisions, and are
+// tested.
+#[mutants::skip]
 pub fn run(root: &Path, staged: bool, base: &str) -> Result<(), String> {
     let diff = diff(root, staged, base)?;
     let packages = touched(&packages(root)?, &String::from_utf8_lossy(&diff));
@@ -23,6 +26,8 @@ pub fn run(root: &Path, staged: bool, base: &str) -> Result<(), String> {
 }
 
 /// Runs cargo-mutants over every line, in each package of the workspace.
+// It only starts cargo-mutants and returns its result.
+#[mutants::skip]
 pub fn run_all(root: &Path) -> Result<(), String> {
     let packages: Vec<_> = packages(root)?
         .into_iter()
@@ -35,6 +40,9 @@ pub fn run_all(root: &Path) -> Result<(), String> {
 // Cargo unifies the features of the packages that one command builds, dev-dependencies included. Two packages
 // whose tests need features of one dependency that conflict, such as two embassy-time drivers, do not build
 // together, so each package gets its own run.
+//
+// It only starts cargo-mutants and returns its result.
+#[mutants::skip]
 fn run_each(root: &Path, packages: &[String], diff_path: Option<&Path>) -> Result<(), String> {
     let jobs = jobs();
     let mut failed = Vec::new();
@@ -150,6 +158,8 @@ fn command(root: &Path, package: &str, diff_path: Option<&Path>, jobs: usize) ->
 /// cargo-mutants book says to "set the number of jobs very conservatively, starting at -j2 or -j3". The build and
 /// test tools parallelise on their own, and a high count gives spurious timeouts, which count as surviving
 /// mutants. A 4-vCPU CI runner gets one job and a 10-core laptop three.
+// The count depends on the host's cores, so no test can name the right value.
+#[mutants::skip]
 fn jobs() -> usize {
     std::thread::available_parallelism()
         .map_or(1, |cores| cores.get() / 3)

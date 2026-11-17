@@ -2,8 +2,6 @@
 # is the output they produce, so a mutant in them survives every test run and says nothing about coverage.
 exclude_globs = [
     "xtask/src/main.rs",
-    "xtask/src/shared/hooks.rs",
-    "xtask/src/shared/mutants.rs",
     "mcu-run/src/main.rs",
 ]
 
@@ -38,14 +36,9 @@ exclude_re = [
     # test can run it.
     "mcu-console-perf/src/lib\\.rs:[0-9:]+ (replace|.* in) lock_held_without_cas",
     # wifi_devices only runs networksetup on macOS or reads /sys/class/net elsewhere, and wifi_ports and
-    # wireless_devices, which read their output, are tested.
-    "xtask/src/shared/host\\.rs:[0-9:]+ replace wifi_devices -> ",
-    # The same functions in mcu-scenario's copy, and host_address and find, which only read this host's
+    # wireless_devices, which read their output, are tested. host_address and find only read this host's
     # interfaces and hand them to choose, which is tested.
     "mcu-scenario/src/host\\.rs:[0-9:]+ (replace (wifi_devices|find|host_address) -> |.* in (find|host_address)$)",
-    # takes_push only runs the repo's `cargo xtask check --help`, and install only hands its answer to write_hooks,
-    # which is tested.
-    "xtask/src/shared/hooks\\.rs:[0-9:]+ (replace (takes_push|install) -> |.* in (takes_push|install)$)",
     # cargo xtask iperf-server's run only binds, prints its two lines and waits, and Bound and result_line are
     # tested.
     "xtask/src/iperf\\.rs:[0-9:]+ replace run -> ",

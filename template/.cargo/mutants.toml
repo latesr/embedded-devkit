@@ -3,12 +3,4 @@
 exclude_globs = [
     "xtask/src/main.rs",
     "xtask/src/check.rs",
-    "xtask/src/shared/hooks.rs",
-    "xtask/src/shared/mutants.rs",
-]
-
-# wifi_devices only runs networksetup on macOS or reads /sys/class/net elsewhere, and wifi_ports and
-# wireless_devices, which read their output, are tested.
-exclude_re = [
-    "xtask/src/shared/host\\.rs:[0-9:]+ replace wifi_devices -> ",
 ]
