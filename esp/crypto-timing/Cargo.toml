@@ -7,8 +7,9 @@ rust-version = "1.95"
 license = "MIT OR Apache-2.0"
 publish = false
 
-# Its own workspace and lock file, because the ESP32 board crates' workspace cannot resolve embassy-crypto-rustcrypto:
-# esp-radio's ieee802154 0.6.1 takes ccm 0.4.4, which pins subtle to =2.4, and p256 0.14 needs subtle 2.6.
+# Its own workspace and lock file, because the ESP32 board crates' lock holds ccm 0.4.4, through esp-radio's
+# ieee802154. ccm 0.4.4 pins subtle to =2.4, and embassy-crypto-rustcrypto needs subtle 2.6. ccm 0.4.3 accepts any
+# subtle 2, so this crate can join that workspace once its lock holds 0.4.3.
 # `cargo xtask check` does not build this crate. Run `cargo test --release` here with the S31 attached, and
 # `cargo fmt --check` and `cargo clippy --release --lib --test crypto_timing -- -D warnings` before a commit.
 [workspace]
@@ -25,9 +26,9 @@ harness = false
 [dependencies]
 defmt = "1.1"
 defmt-rtt = "1.3"
-# At the embassy commit that embedded-tls pins. embassy-crypto links once per binary.
-embassy-crypto = { git = "https://github.com/embassy-rs/embassy", rev = "822a76ea91f2c0885c6eb0c65fe91181e31133e1" }
-embassy-crypto-rustcrypto = { git = "https://github.com/embassy-rs/embassy", rev = "822a76ea91f2c0885c6eb0c65fe91181e31133e1", features = [
+# At the embassy commit that the embedded-tls fork on latesr pins. embassy-crypto links once per binary.
+embassy-crypto = { git = "https://github.com/embassy-rs/embassy", rev = "da5e85fe5d3945d27a0d2066458d0fa3460c8d87" }
+embassy-crypto-rustcrypto = { git = "https://github.com/embassy-rs/embassy", rev = "da5e85fe5d3945d27a0d2066458d0fa3460c8d87", features = [
     "embassy-crypto-sha256",
     "embassy-crypto-p256-arith",
     "embassy-crypto-p256-ecdh",
@@ -50,9 +51,9 @@ embedded-test = { version = "0.7", default-features = false, features = ["semiho
 # The rsa crate needs a heap. The test logs the heap's peak use.
 esp-alloc = { git = "https://github.com/latesr/esp-hal", rev = "828059d4276ed62b48f2e95a04106fc89fda17a0", features = ["esp32s31", "internal-heap-stats"] }
 hex-literal = "1"
-# The RSA verify that embedded-tls's `rsa` feature uses, at its version.
-rsa = { version = "0.9.9", default-features = false }
-sha2 = { version = "0.10", default-features = false, features = ["oid"] }
+# The RSA verify that the embedded-tls fork's `rsa` feature uses, at the fork's version.
+# Its SHA-256 is the one the verify takes, so the test uses rsa's re-export of sha2.
+rsa = { version = "0.10.0", default-features = false, features = ["encoding", "pkcs1v15"] }
 
 [profile.release]
 debug = true

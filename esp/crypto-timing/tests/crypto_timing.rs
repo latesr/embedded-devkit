@@ -169,8 +169,8 @@ macro_rules! rsa_verify {
             use crypto_bigint::modular::{FixedMontyForm, FixedMontyParams};
             use crypto_bigint::{Odd, Uint, $uint};
             use esp_hal::rsa::{RsaModularExponentiation, operand_sizes::$op};
-            use rsa::{BigUint, Pkcs1v15Sign, RsaPublicKey};
-            use sha2::{Digest, Sha256};
+            use rsa::sha2::{Digest, Sha256};
+            use rsa::{BoxedUint, Pkcs1v15Sign, PublicKey};
 
             let digest = Sha256::digest(wycheproof_rsa::MESSAGE);
             let e = $uint::from_u32(65537);
@@ -290,8 +290,11 @@ macro_rules! rsa_verify {
             );
             rsa.apply_config(&esp_hal::rsa::Config::default()).unwrap();
 
-            let key = RsaPublicKey::new(BigUint::from_bytes_be(&$modulus), BigUint::from(65537u32))
-                .unwrap();
+            let key = PublicKey::new(
+                BoxedUint::from_be_slice_vartime(&$modulus),
+                BoxedUint::from(65537u32),
+            )
+            .unwrap();
             key.verify(Pkcs1v15Sign::new::<Sha256>(), &digest, &$signature)
                 .unwrap();
             time(
