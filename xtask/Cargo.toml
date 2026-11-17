@@ -10,7 +10,7 @@ license.workspace = true
 [dependencies]
 clap = { version = "4", features = ["derive"] }
 # `cargo xtask iperf-server` runs its server. The rev must match mcu-console-net's.
-embedded-iperf2 = { git = "https://github.com/latesr/embedded-iperf2", rev = "f24b0bf82857881de376fcbcee267c18d6628fae", version = "0.1.0", features = ["std"] }
+embedded-iperf2 = { git = "https://github.com/latesr/embedded-iperf2", rev = "a16be475e2d3cb6dff6b7a088df47c73f7b21089", version = "0.1.0", features = ["std"] }
 if-addrs = "0.15"
 # Its `#[mutants::skip]` marks the shared functions that a host test cannot check.
 mutants = "0.0.4"

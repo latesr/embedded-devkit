@@ -19,7 +19,7 @@ embassy-futures = "0.1"
 embassy-time = "0.5"
 # embedded-iperf2 is not on crates.io yet, so it comes from GitHub. mcu-console-net cannot be published before
 # embedded-iperf2 is. The rev must match xtask's.
-embedded-iperf2 = { git = "https://github.com/latesr/embedded-iperf2", rev = "f24b0bf82857881de376fcbcee267c18d6628fae", version = "0.1.0", features = ["embassy-net"], optional = true }
+embedded-iperf2 = { git = "https://github.com/latesr/embedded-iperf2", rev = "a16be475e2d3cb6dff6b7a088df47c73f7b21089", version = "0.1.0", features = ["embassy-net"], optional = true }
 mcu-console = { path = "../mcu-console" }
 # smoltcp keeps one DNS result and asks one resolver unless these raise the limits. Three resolvers match the
 # three a DHCP lease can give embassy-net's StaticConfigV4.

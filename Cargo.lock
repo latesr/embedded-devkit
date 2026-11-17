@@ -869,7 +869,7 @@ dependencies = [
 [[package]]
 name = "embedded-iperf2"
 version = "0.1.0"
-source = "git+https://github.com/latesr/embedded-iperf2?rev=f24b0bf82857881de376fcbcee267c18d6628fae#f24b0bf82857881de376fcbcee267c18d6628fae"
+source = "git+https://github.com/latesr/embedded-iperf2?rev=a16be475e2d3cb6dff6b7a088df47c73f7b21089#a16be475e2d3cb6dff6b7a088df47c73f7b21089"
 dependencies = [
  "embassy-futures",
  "embassy-net",
