@@ -5,15 +5,9 @@
 
 # embedded-devkit
 
-embedded-devkit holds the tooling and board platforms that related repos share and build on. A derived repo takes copies of the shared files through `cargo xtask sync`.
+embedded-devkit holds the board platforms that the libraries are tested on, and pins the libraries for an application.
 
-## Shared files
-
-`CONVENTIONS.md`, `CONTRIBUTING.md`, the rule files that `CONTRIBUTING.md` indexes, `xtask/src/shared/`, and the git hooks are the originals. Each derived repo holds a copy.
-
-1. Edit the originals here, and commit.
-2. Run `cargo xtask sync ../<derived-repo>`. Sync copies from the devkit's `HEAD`, refuses while the shared files have changes that are not committed, and installs the hooks from the shared `hooks` module.
-3. Commit the copy in each repo. The subject names the devkit commit, such as "Sync the rule files and xtask/src/shared from embedded-devkit dd579ec".
+The rule files, `xtask/src/shared/`, and the git hooks are copies from embedded-conventions. Run `cargo xtask sync <this repo>` there.
 
 ## Published crates
 
@@ -71,18 +65,3 @@ The on-target tests and `cargo run` use the installed `mcu` binary from `mcu-run
 - **Target folders.** Each listed folder builds in its own `target` folder, because each crate's `.cargo/config.toml` sets esp-hal's configuration, and a shared folder rebuilds esp-hal for each crate.
 
 The tests of a board or family crate run on the board, so the check does not run them, and cargo-mutants does not reach them.
-
-## The template
-
-`template/` is a cargo-generate template for a new repo. It is not built as part of this workspace. To start a repo beside the others, in the folder that holds the devkit:
-
-```
-cargo generate --path embedded-devkit/template --name <repo> --define "description=<one sentence>"
-git -C <repo> branch -m main
-cd embedded-devkit
-cargo xtask sync ../<repo>
-```
-
-Sync supplies the rule files, `xtask/src/shared/`, and the git hooks, so the template does not hold them. cargo-generate runs `git init` in the new repo, so the hooks have a folder to go in. It names the branch `master`, and the CI workflow builds `main`. After generation the new repo owns every other file.
-
-Before committing a change to the template, generate a repo from it in a scratch folder, sync it, and run `cargo xtask check` there.

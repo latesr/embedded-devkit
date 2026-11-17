@@ -4,7 +4,6 @@ Covers: the index of the ADRs.
 
 | ADR | Summary |
 |---|---|
-| [ADR-0001: The synced copies of the shared rules and checks](decisions/0001-synced-shared-rules-and-checks.md) | Each repo holds a copy of the rule files and `xtask/src/shared/`, and the devkit's sync keeps it current |
 | [ADR-0002: The line console protocol](decisions/0002-line-console-protocol.md) | One text protocol, the version and the image ID in the banner, one command trait, writes that do not wait, and a cancel signal |
 | [ADR-0003: `mcu-run` over the probe-rs library](decisions/0003-mcu-run-over-probe-rs.md) | A library and a thin binary, its own embedded-test runner, the same steps on every board, and a run that follows the board across a reset |
 | [ADR-0004: Scenario tests through the console](decisions/0004-scenario-tests-through-the-console.md) | Scenario tests on the host through the console, on-target tests under embedded-test, one selector for the probe and the port, and `cargo xtask hil` on one board crate |

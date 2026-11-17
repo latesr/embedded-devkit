@@ -53,13 +53,13 @@ Each requirement has an ID, such as K-3 or B-10. Tests, plans, and commits cite 
 | `embedded-devkit-esp32-c5-devkitc-1` | No | The board crate for the ESP32-C5-DevKitC-1 v1.2 |
 | `embedded-devkit-esp32-s31-function-coreboard-1` | No | The board crate for the ESP32-S31-Function-CoreBoard-1 v1.0 |
 | `embedded-devkit-nucleo-h7s3l8` | No | The board crate for the NUCLEO-H7S3L8 |
-| `xtask` | No | The checks, the sync, and other repo tasks |
+| `xtask` | No | The checks and other repo tasks |
 
 The five `mcu-` crates go to crates.io once they are stable. Until then, and for the board crates always, other repos depend on these crates by git tag.
 
 - Each `mcu-` crate is built so that it can move to its own repo. Each states its own `version` and `rust-version`, and has its own `README.md`.
-- The board crates are public on GitHub and not on crates.io before 0.1.0. They serve the test firmware of the repos that sync from the devkit, and they are the starter platform on which an integrator writes an application.
-- The shared xtask code is copied into each repo by `cargo xtask sync`, per [ADR-0001](docs/decisions/0001-synced-shared-rules-and-checks.md). No crate depends on it.
+- The board crates are public on GitHub and not on crates.io before 0.1.0. They serve the test firmware of the library repos, and they are the starter platform on which an integrator writes an application.
+- The shared xtask code is a copy from embedded-conventions, made by `cargo xtask sync` there. No crate depends on it.
 
 ## Console: `mcu-console`
 

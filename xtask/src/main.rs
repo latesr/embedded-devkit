@@ -4,7 +4,6 @@ mod check;
 mod hil;
 mod iperf;
 mod shared;
-mod sync;
 
 use clap::{Parser, Subcommand};
 use std::path::{Path, PathBuf};
@@ -51,13 +50,6 @@ enum Command {
     },
     #[command(flatten)]
     Shared(shared::Command),
-    /// Copy the rule files and xtask/src/shared into each repo, install its git hooks, and report each copy that was
-    /// edited in place.
-    Sync {
-        /// The folders of the repos to copy into.
-        #[arg(required = true)]
-        repos: Vec<PathBuf>,
-    },
 }
 
 fn main() {
@@ -82,7 +74,6 @@ fn main() {
             iperf::run(transport, port)
         }
         Command::Shared(command) => shared::run(&root, command),
-        Command::Sync { repos } => sync::run(&root, &repos),
     };
     if let Err(message) = result {
         eprintln!("{message}");

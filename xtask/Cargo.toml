@@ -1,6 +1,6 @@
 [package]
 name = "xtask"
-description = "Repository tasks: the checks, the shared commands and the sync to other repos. Not published."
+description = "Repository tasks: the checks, the hardware tests, and the shared commands. Not published."
 publish = false
 version.workspace = true
 edition.workspace = true

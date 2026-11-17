@@ -1,9 +1,9 @@
 [workspace]
 resolver = "3"
 members = ["mcu-console", "mcu-console-net", "mcu-console-perf", "mcu-run", "mcu-scenario", "scenario-tests", "xtask"]
-# The template is copied into a new repo, where it is its own workspace. The board crates are in workspaces of their
-# own, because they build for microcontrollers. esp/ holds the ESP32 ones and stm32/ the STM32 ones.
-exclude = ["template", "esp", "stm32"]
+# The board crates are in workspaces of their own, because they build for microcontrollers. esp/ holds the ESP32
+# ones and stm32/ the STM32 ones.
+exclude = ["esp", "stm32"]
 
 [workspace.package]
 version = "0.1.0"
