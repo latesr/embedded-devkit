@@ -56,6 +56,9 @@ jobs:
             esp -> embedded-devkit-esp/target
             stm32 -> embedded-devkit-nucleo-h7s3l8/target
       - run: cargo xtask check --full
+      # Cargo rewrites a lock file that does not match its manifests, and the check then tests what was not committed.
+      - name: Fail on a lock file that the check changed
+        run: git diff --exit-code -- '*Cargo.lock'
       - uses: taiki-e/install-action@v2
         with:
           tool: cargo-mutants
