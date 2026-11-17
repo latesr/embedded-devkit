@@ -245,13 +245,14 @@ A crate that goes into an application takes the lowest MSRV its dependencies all
 - `mcu-console` does not allocate memory, and does not use atomics.
 - Each crate states its own MSRV, with edition 2024. The Platforms table gives the MSRV of each published crate and each board crate.
 - Every host tool parses its arguments with clap.
+- Every combination of a published crate's features builds.
 - Traits from `embedded-io`, `embedded-io-async`, `embedded-hal`, `embedded-hal-async`, `defmt`, and the RustCrypto crates may appear in a public API. A board crate's public API also holds its HAL's types. `mcu-console-net`'s public API, and a board crate's network functions, also hold embassy-net types. No other dependency type appears in a public API without an ADR. `mcu-run`'s API holds no probe-rs type.
 
 `EMBEDDED.md` names the lints that enforce the code constraints.
 
 ## Testing
 
-Development is test first. `TESTING.md` states how a developer writes and checks tests. This section states what the test suite must contain, and what CI runs.
+Development is test first. `TESTING.md` states how a developer writes and checks tests. This section states what the test suite must contain.
 
 ### Unit and property tests
 
@@ -262,13 +263,6 @@ Development is test first. `TESTING.md` states how a developer writes and checks
 ### Hardware tests
 
 The Hardware tests section states what runs on the boards. The hardware tests run on a developer's machine with the boards attached, before each release.
-
-### Continuous integration
-
-- CI runs `cargo xtask check --full` on every pull request. `CHECKS.md` and `AGENTS.md` list what it runs.
-- CI runs cargo-mutants over the lines that each pull request changes.
-- Each night, a full cargo-mutants run covers every crate if the latest commit on `main` has not passed one already. One also runs before each release.
-- The nightly job checks every feature combination of every published crate with `cargo hack`. `cargo xtask check --full` covers pairs of features.
 
 ## Licence
 
