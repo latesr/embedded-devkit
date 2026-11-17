@@ -69,8 +69,30 @@ jobs:
           fi
           cargo xtask mutants --base "$base"
 
+  # The lock file and the toolchain are pinned, so a nightly run of a commit that has already passed one tests nothing
+  # new. A run that a person starts always runs.
+  untested:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      run: ${{ steps.passed.outputs.run }}
+    steps:
+      - id: passed
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          passed="$(gh run list --workflow ci.yml --commit "$GITHUB_SHA" --status success --json event \
+            --jq '[.[] | select(.event == "schedule" or .event == "workflow_dispatch")] | length')"
+          if [ "$passed" = 0 ]; then echo "run=true" >> "$GITHUB_OUTPUT"; fi
+
   nightly:
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: untested
+    # A run that a person starts skips the untested job, and a job after a skipped one runs only with !cancelled().
+    if: >-
+      !cancelled() && (github.event_name == 'workflow_dispatch' || needs.untested.outputs.run == 'true')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

@@ -267,7 +267,7 @@ The Hardware tests section states what runs on the boards. The hardware tests ru
 
 - CI runs `cargo xtask check --full` on every pull request. `CHECKS.md` and `AGENTS.md` list what it runs.
 - CI runs cargo-mutants over the lines that each pull request changes.
-- A full cargo-mutants run covers every crate nightly, and before each release.
+- Each night, a full cargo-mutants run covers every crate if the latest commit on `main` has not passed one already. One also runs before each release.
 - The nightly job checks every feature combination of every published crate with `cargo hack`. `cargo xtask check --full` covers pairs of features.
 
 ## Licence

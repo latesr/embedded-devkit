@@ -49,7 +49,7 @@ Development is test first. `TESTING.md` states how a developer writes and checks
 
 - CI runs `cargo xtask check` on every push. `CHECKS.md` and `AGENTS.md` list what it runs.
 - CI runs cargo-mutants over the changed lines on every push.
-- A full cargo-mutants run covers every crate nightly and before each release.
+- Each night, a full cargo-mutants run covers every crate if the latest commit on `main` has not passed one already. One also runs before each release.
 - The nightly job checks every feature combination of every published crate with `cargo hack`. `cargo xtask check` covers pairs of features.
 
 ## Licence
