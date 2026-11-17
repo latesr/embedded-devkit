@@ -19,7 +19,9 @@ use std::cell::RefCell;
 use std::collections::VecDeque;
 use std::rc::Rc;
 
-/// Bytes the host sent. Empty means the host closed the transport.
+/// Bytes the host sent. Empty means the host closed the transport. `0xfe` is a read error. `0xfc` marks the end of
+/// the input once a read has returned it. A read there fails with an error that the console does not expect. A
+/// console that does not stop at the end of the input then fails a test, and does not hang.
 struct Rx(VecDeque<u8>);
 
 impl ErrorType for Rx {
@@ -31,13 +33,19 @@ impl Read for Rx {
         if self.0.front() == Some(&0xfe) {
             return Err(embedded_io::ErrorKind::Other);
         }
+        if self.0.front() == Some(&0xfc) {
+            return Err(embedded_io::ErrorKind::BrokenPipe);
+        }
         // One byte per read, so a line split at any point still works.
         match self.0.pop_front() {
             Some(byte) => {
                 buf[0] = byte;
                 Ok(1)
             }
-            None => Ok(0),
+            None => {
+                self.0.push_back(0xfc);
+                Ok(0)
+            }
         }
     }
 }
