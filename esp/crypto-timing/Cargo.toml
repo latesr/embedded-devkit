@@ -3,7 +3,7 @@ name = "crypto-timing"
 description = "How long the ESP32-S31's ECC and SHA blocks take, beside embassy-crypto's rustcrypto drivers"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.95"
+rust-version = "1.100"
 license = "MIT OR Apache-2.0"
 publish = false
 
@@ -40,8 +40,8 @@ embassy-crypto-rustcrypto = { git = "https://github.com/embassy-rs/embassy", rev
     "embassy-crypto-ed25519",
 ] }
 # The same esp-hal commit as the board crates, from esp/Cargo.toml.
-esp-bootloader-esp-idf = { git = "https://github.com/latesr/esp-hal", rev = "828059d4276ed62b48f2e95a04106fc89fda17a0", features = ["esp32s31"] }
-esp-hal = { git = "https://github.com/latesr/esp-hal", rev = "828059d4276ed62b48f2e95a04106fc89fda17a0", features = ["esp32s31", "unstable", "defmt"] }
+esp-bootloader-esp-idf = { git = "https://github.com/latesr/esp-hal", rev = "1cd5096724d05bb1e739ed2a0bc0231c3df8d467", features = ["esp32s31"] }
+esp-hal = { git = "https://github.com/latesr/esp-hal", rev = "1cd5096724d05bb1e739ed2a0bc0231c3df8d467", features = ["esp32s31", "unstable", "defmt"] }
 semihosting = { version = "0.1", features = ["stdio", "panic-handler"] }
 
 [dev-dependencies]
@@ -49,7 +49,7 @@ semihosting = { version = "0.1", features = ["stdio", "panic-handler"] }
 crypto-bigint = { version = "0.7.5", default-features = false }
 embedded-test = { version = "0.7", default-features = false, features = ["semihosting", "defmt"] }
 # The rsa crate needs a heap. The test logs the heap's peak use.
-esp-alloc = { git = "https://github.com/latesr/esp-hal", rev = "828059d4276ed62b48f2e95a04106fc89fda17a0", features = ["esp32s31", "internal-heap-stats"] }
+esp-alloc = { git = "https://github.com/latesr/esp-hal", rev = "1cd5096724d05bb1e739ed2a0bc0231c3df8d467", features = ["esp32s31", "internal-heap-stats"] }
 hex-literal = "1"
 # The RSA verify that the embedded-tls fork's `rsa` feature uses, at the fork's version.
 # Its SHA-256 is the one the verify takes, so the test uses rsa's re-export of sha2.

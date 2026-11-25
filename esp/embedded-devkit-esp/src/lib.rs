@@ -31,7 +31,9 @@ use esp_hal::flash::{self, Flash};
 use esp_hal::peripherals::{FLASH, Peripherals, USB_DEVICE};
 use esp_hal::psram::Psram;
 use esp_hal::rtc_cntl::SocResetReason;
-use esp_hal::usb::usb_serial_jtag::{UsbSerialJtag, UsbSerialJtagRx, UsbSerialJtagTx};
+use esp_hal::usb::usb_serial_jtag::{
+    self, ConfigError, UsbSerialJtag, UsbSerialJtagPin, UsbSerialJtagRx, UsbSerialJtagTx,
+};
 use esp_hal::{Blocking, ram};
 use mcu_console::{Args, Cancel, CommandResult, Commands, Help, Reply};
 use semihosting as _;
@@ -224,7 +226,9 @@ pub mod embassy {
     use esp_hal::Async;
     use esp_hal::peripherals::{TIMG0, USB_DEVICE};
     use esp_hal::timer::timg::TimerGroup;
-    use esp_hal::usb::usb_serial_jtag::{UsbSerialJtag, UsbSerialJtagRx, UsbSerialJtagTx};
+    use esp_hal::usb::usb_serial_jtag::{
+        self, ConfigError, UsbSerialJtag, UsbSerialJtagPin, UsbSerialJtagRx, UsbSerialJtagTx,
+    };
 
     /// Starts esp-rtos on the first timer of `timg0`. esp-rtos also drives Embassy's time. Call it once, before
     /// the first `await`.
@@ -233,14 +237,27 @@ pub mod embassy {
     }
 
     /// The console transport over USB Serial/JTAG, for the async console. The async console bounds each write
-    /// with its own timeout, so a transmitter that waits for the host does not block it for ever.
+    /// with its own timeout, so a transmitter that waits for the host does not block it for ever. `dp` and `dm`
+    /// are the chip's USB D+ and D- pins, which the transport holds.
+    ///
+    /// Fails when the pins are not the chip's USB pins, or when the chip's eFuses route USB Serial/JTAG to a PHY
+    /// that esp-hal does not support.
     pub fn console(
         usb: USB_DEVICE<'static>,
-    ) -> (
-        UsbSerialJtagRx<'static, Async>,
-        UsbSerialJtagTx<'static, Async>,
-    ) {
-        UsbSerialJtag::new(usb).into_async().split()
+        dp: impl UsbSerialJtagPin + 'static,
+        dm: impl UsbSerialJtagPin + 'static,
+    ) -> Result<
+        (
+            UsbSerialJtagRx<'static, Async>,
+            UsbSerialJtagTx<'static, Async>,
+        ),
+        ConfigError,
+    > {
+        Ok(
+            UsbSerialJtag::new(usb, dp, dm, usb_serial_jtag::Config::default())?
+                .into_async()
+                .split(),
+        )
     }
 }
 
@@ -267,13 +284,21 @@ pub fn image_id() -> Option<&'static [u8]> {
 }
 
 /// The console transport over USB Serial/JTAG: the receiver, and a transmitter that never waits for the host.
-pub fn console(usb: USB_DEVICE<'static>) -> (UsbSerialJtagRx<'static, Blocking>, UsbTx) {
-    let (rx, tx) = UsbSerialJtag::new(usb).split();
-    (rx, UsbTx(tx))
+/// `dp` and `dm` are the chip's USB D+ and D- pins, which the transport holds.
+///
+/// Fails when the pins are not the chip's USB pins, or when the chip's eFuses route USB Serial/JTAG to a PHY that
+/// esp-hal does not support.
+pub fn console(
+    usb: USB_DEVICE<'static>,
+    dp: impl UsbSerialJtagPin + 'static,
+    dm: impl UsbSerialJtagPin + 'static,
+) -> Result<(UsbSerialJtagRx<'static, Blocking>, UsbTx), ConfigError> {
+    let (rx, tx) = UsbSerialJtag::new(usb, dp, dm, usb_serial_jtag::Config::default())?.split();
+    Ok((rx, UsbTx(tx)))
 }
 
-/// The USB Serial/JTAG transmitter as a transport that never blocks when no host reads. esp-hal's own `Write`
-/// waits for the host to drain the FIFO, and with no host attached it waits for ever.
+/// The USB Serial/JTAG transmitter as a transport that never blocks when no host reads. esp-hal's own `write`
+/// waits for the host to drain the FIFO, up to its timeout. `UsbTx` never waits.
 pub struct UsbTx(UsbSerialJtagTx<'static, Blocking>);
 
 impl ErrorType for UsbTx {
@@ -292,19 +317,21 @@ impl Write for UsbTx {
     /// Fails with `WriteZero` when the FIFO has no room, because embedded-io forbids `Ok(0)` for a non-empty
     /// buffer.
     fn write(&mut self, bytes: &[u8]) -> Result<usize, Self::Error> {
-        let written = bytes
-            .iter()
-            .take_while(|&&byte| self.0.write_byte_nb(byte).is_ok())
-            .count();
-        if written == 0 && !bytes.is_empty() {
+        if bytes.is_empty() {
+            return Ok(0);
+        }
+        // esp-hal's `write` waits only while the FIFO is full, so the check keeps it from waiting.
+        if !self.0.write_ready() {
             return Err(embedded_io::ErrorKind::WriteZero);
         }
-        Ok(written)
+        self.0
+            .write(bytes)
+            .map_err(|_| embedded_io::ErrorKind::TimedOut)
     }
 
     /// Hands the FIFO to the host without waiting for the host to take it.
     fn flush(&mut self) -> Result<(), Self::Error> {
-        let _ = self.0.flush_tx_nb();
+        let _ = self.0.try_flush();
         Ok(())
     }
 }

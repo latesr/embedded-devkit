@@ -7,7 +7,7 @@
 mod common;
 include!(concat!(env!("CARGO_MANIFEST_DIR"), "/examples/board.rs"));
 
-use board::{boot_count, embassy, ethernet, image_id, info, init, psram, reset};
+use board::{boot_count, embassy, ethernet, image_id, info, init_psram_250mhz, psram, reset};
 use common::{Echo, FIRMWARE};
 use embassy_executor::Spawner;
 use embassy_time::Delay;
@@ -72,7 +72,8 @@ mod lock {
 
 #[esp_hal::main]
 async fn main(spawner: Spawner) {
-    let mut peripherals = init();
+    // At 250 MHz PSRAM, the MPLL lets RGMII run at 1 Gbit/s.
+    let mut peripherals = init_psram_250mhz();
     let boot = boot_count();
     embassy::start(peripherals.TIMG0);
     let psram = psram(peripherals.PSRAM);
@@ -106,7 +107,10 @@ async fn main(spawner: Spawner) {
         net.with_iperf(rx, tx, work)
     };
     defmt::info!("console firmware, boot {}", boot);
-    let (rx, tx) = embassy::console(peripherals.USB_DEVICE);
+    let (dp, dm) = usb_pins!(peripherals);
+    let Ok((rx, tx)) = embassy::console(peripherals.USB_DEVICE, dp, dm) else {
+        defmt::panic!("USB Serial/JTAG did not start");
+    };
     let config = Config {
         name: NAME,
         boot,

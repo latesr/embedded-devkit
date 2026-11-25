@@ -42,8 +42,8 @@ jobs:
       # AGENTS.md names the MSRV of each crate, and the targets each one is checked for.
       - name: Install the MSRV toolchains
         run: |
-          rustup toolchain install 1.91 1.95 --profile minimal
-          rustup target add riscv32imac-unknown-none-elf riscv32imafc-unknown-none-elf --toolchain 1.95
+          rustup toolchain install 1.91 1.95 1.100 --profile minimal
+          rustup target add riscv32imac-unknown-none-elf riscv32imafc-unknown-none-elf --toolchain 1.100
           rustup target add thumbv7em-none-eabihf --toolchain 1.91
       - uses: taiki-e/install-action@cargo-hack
       - uses: Swatinem/rust-cache@v2

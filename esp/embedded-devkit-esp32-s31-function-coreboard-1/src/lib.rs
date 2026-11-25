@@ -16,22 +16,30 @@ pub use embedded_devkit_esp::perf;
 pub use embedded_devkit_esp::wifi;
 pub use embedded_devkit_esp::{Info, UsbTx, boot_count, console, image_id, reset, reset_name};
 
-use esp_hal::clock::CpuClock;
+use esp_hal::clock::ll::MpllClkConfig;
+use esp_hal::clock::{ClockConfig, CpuClock};
 use esp_hal::peripherals::{FLASH, PSRAM, Peripherals};
 use esp_hal::psram::{Psram, PsramConfig};
 
-/// Brings up the chip at its fastest CPU clock, and returns every peripheral. The application passes on the ones
-/// the board crate's other functions take, and keeps the rest.
+/// Brings up the chip at its fastest CPU clock, and returns every peripheral. The PSRAM runs at 200 MHz, the
+/// rating in the module's datasheet. The application passes on the peripherals the board crate's other functions
+/// take, and keeps the rest.
 ///
-/// The MPLL runs at twice the PSRAM frequency that the application's `ESP_HAL_CONFIG_PSRAM_FREQUENCY` sets: 400 MHz
-/// for 200 MHz, or 500 MHz for 250 MHz. At 400 MHz, RGMII Ethernet runs at 100 Mbit/s at most.
+/// The MPLL runs at 400 MHz, twice the PSRAM's rate. At 400 MHz, RGMII Ethernet runs at 100 Mbit/s at most.
 pub fn init() -> Peripherals {
     esp_hal::init(esp_hal::Config::default().with_cpu_clock(CpuClock::max()))
 }
 
-/// Takes the module's Octal SPI PSRAM, which the start-up has started at the application's
-/// `ESP_HAL_CONFIG_PSRAM_FREQUENCY`, and detects its size. 200 MHz is the rating in the module's datasheet, and
-/// 250 MHz runs the PSRAM beyond it.
+/// Brings up the chip as [`init`] does, but with the PSRAM at 250 MHz, beyond the module's rating. The MPLL runs
+/// at 500 MHz, which lets RGMII Ethernet run at 1 Gbit/s.
+pub fn init_psram_250mhz() -> Peripherals {
+    let mut clocks = ClockConfig::from(CpuClock::max());
+    clocks.mpll_clk = Some(MpllClkConfig::_500);
+    esp_hal::init(esp_hal::Config::default().with_cpu_clock(clocks))
+}
+
+/// Takes the module's Octal SPI PSRAM, which the start-up has started, and detects its size. [`init`] or
+/// [`init_psram_250mhz`] sets its rate.
 pub fn psram(psram: PSRAM<'static>) -> Psram {
     Psram::new(psram, PsramConfig::default())
 }

@@ -17,8 +17,11 @@ use embedded_devkit_esp32_s31_function_coreboard_1 as _;
 #[cfg(test)]
 #[embedded_test::tests]
 mod tests {
-    use embedded_devkit_esp32_s31_function_coreboard_1::{boot_count, console, init, psram};
+    use embedded_devkit_esp32_s31_function_coreboard_1::{
+        boot_count, console, init, init_psram_250mhz, psram,
+    };
     use embedded_io::{ErrorKind, Write, WriteReady};
+    use esp_hal::psram::Psram;
     use esp_hal::time::{Duration, Instant};
 
     #[test]
@@ -27,19 +30,31 @@ mod tests {
         assert_eq!(boot_count(), 1);
     }
 
-    /// After `init`, the MPLL runs at twice the PSRAM frequency that `ESP_HAL_CONFIG_PSRAM_FREQUENCY` sets, read
-    /// back from its dividers: the 40 MHz crystal times (`fb_div` + 1), divided by (`ref_div` + 1).
-    #[test]
-    fn the_mpll_runs_at_twice_the_psram_frequency() {
-        let peripherals = init();
-        let _psram = psram(peripherals.PSRAM);
+    /// The MPLL's rate, read back from its dividers: the 40 MHz crystal times (`fb_div` + 1), divided by
+    /// (`ref_div` + 1).
+    fn mpll_mhz() -> u32 {
         let dividers = esp_hal::peripherals::LP_AON_CLK_RST::regs()
             .mspi_div()
             .read();
         let fb_div = u32::from(dividers.mspi_fb_div().bits());
         let ref_div = u32::from(dividers.mspi_ref_div().bits());
-        let psram_mhz = esp_hal::psram::PsramTimingParams::default().clock;
-        assert_eq!(40 * (fb_div + 1) / (ref_div + 1), 2 * psram_mhz);
+        40 * (fb_div + 1) / (ref_div + 1)
+    }
+
+    /// After `init`, the MPLL runs at 400 MHz, twice the PSRAM's 200 MHz.
+    #[test]
+    fn after_init_the_mpll_runs_at_400_mhz() {
+        let peripherals = init();
+        let _psram = psram(peripherals.PSRAM);
+        assert_eq!(mpll_mhz(), 400);
+    }
+
+    /// After `init_psram_250mhz`, the MPLL runs at 500 MHz, twice the PSRAM's 250 MHz.
+    #[test]
+    fn after_init_psram_250mhz_the_mpll_runs_at_500_mhz() {
+        let peripherals = init_psram_250mhz();
+        let _psram = psram(peripherals.PSRAM);
+        assert_eq!(mpll_mhz(), 500);
     }
 
     /// The S31's PSRAM has its own window, from `0x5000_0000`. The PSRAM MMU cannot map flash, so code that
@@ -60,12 +75,23 @@ mod tests {
     }
 
     /// The module has 16 MB of PSRAM. The code runs from its first pages, and every word of the rest holds
-    /// the value written to it, at the PSRAM frequency that the configuration sets. The caches are far smaller than the rest, so most reads
-    /// come from the PSRAM itself.
+    /// the value written to it, at 200 MHz. The caches are far smaller than the rest, so most reads come from the
+    /// PSRAM, not from a cache.
     #[test]
     fn psram_holds_a_pattern_after_the_code_region() {
         let peripherals = init();
-        let psram = psram(peripherals.PSRAM);
+        assert_eq!(pattern_mismatches(&psram(peripherals.PSRAM)), 0);
+    }
+
+    /// At 250 MHz, every word of the PSRAM after the code holds the value written to it.
+    #[test]
+    fn at_250_mhz_psram_holds_a_pattern_after_the_code_region() {
+        let peripherals = init_psram_250mhz();
+        assert_eq!(pattern_mismatches(&psram(peripherals.PSRAM)), 0);
+    }
+
+    /// Writes a pattern to every word of the PSRAM after the code, then returns how many words read back wrong.
+    fn pattern_mismatches(psram: &Psram) -> usize {
         assert_eq!(psram.size(), 16 * 1024 * 1024);
         let (start, len) = psram.raw_parts();
         assert!(len > 0);
@@ -75,15 +101,14 @@ mod tests {
         // SAFETY: `raw_parts` gives the mapped PSRAM, which nothing else in this test uses, and every index is
         // below `len / 4`.
         #[expect(unsafe_code)]
-        let mismatches = unsafe {
+        unsafe {
             for index in 0..count {
                 words.add(index).write_volatile(pattern(index));
             }
             (0..count)
                 .filter(|&index| words.add(index).read_volatile() != pattern(index))
                 .count()
-        };
-        assert_eq!(mismatches, 0);
+        }
     }
 
     /// Nothing on the host reads the console during a test, and the ROM's boot output has already filled the FIFO.
@@ -91,7 +116,12 @@ mod tests {
     #[test]
     fn the_transmitter_takes_a_byte_exactly_when_ready_and_never_waits() {
         let peripherals = init();
-        let (_rx, mut tx) = console(peripherals.USB_DEVICE);
+        let (_rx, mut tx) = console(
+            peripherals.USB_DEVICE,
+            peripherals.GPIO34,
+            peripherals.GPIO33,
+        )
+        .unwrap();
         let start = Instant::now();
         for _ in 0..1000 {
             if tx.write_ready().unwrap() {

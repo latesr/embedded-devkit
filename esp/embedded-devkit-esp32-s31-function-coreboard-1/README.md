@@ -4,14 +4,9 @@ The board crate for the ESP32-S31-Function-CoreBoard-1 v1.0.
 
 ## PSRAM at 250 MHz
 
-The board crate runs its code from PSRAM at 200 MHz, the rating in the module's datasheet. At 200 MHz, Ethernet runs at 100 Mbit/s at most. To run the PSRAM at 250 MHz, which also lets Ethernet run at 1 Gbit/s, set this in the application's `.cargo/config.toml`:
+The board crate runs its code from PSRAM. After `init`, the PSRAM runs at 200 MHz, the rating in the module's datasheet, and Ethernet runs at 100 Mbit/s at most. After `init_psram_250mhz`, the PSRAM runs at 250 MHz, and Ethernet runs at 1 Gbit/s. The Ethernet example uses `init_psram_250mhz`.
 
-```toml
-[env]
-ESP_HAL_CONFIG_PSRAM_FREQUENCY = "250MHz"
-```
-
-250 MHz runs the PSRAM beyond the module's rating. Test each board before you rely on it. The on-target test `psram_holds_a_pattern_after_the_code_region` writes and reads back every word of the PSRAM that the code does not use.
+250 MHz runs the PSRAM beyond the module's rating. Test each board before you rely on it. The on-target test `at_250_mhz_psram_holds_a_pattern_after_the_code_region` writes and reads back every word of the PSRAM that the code does not use, at 250 MHz.
 
 ## If the board stops answering
 

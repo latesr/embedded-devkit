@@ -15,6 +15,5 @@ rustflags = [
 DEFMT_LOG = "info"
 # A standard IP MTU of 1500, which is a frame of 1514 bytes. esp-radio's default of 1492 counts the frame (B-15).
 ESP_RADIO_CONFIG_WIFI_MTU = "1514"
-# Code and read-only data run from PSRAM, at the module's rating of 200 MHz. The README says when to use 250 MHz.
+# Code and read-only data run from PSRAM, at the rate that `init` or `init_psram_250mhz` chooses.
 ESP_HAL_CONFIG_CODE_IN_PSRAM = "true"
-ESP_HAL_CONFIG_PSRAM_FREQUENCY = "200MHz"

@@ -32,7 +32,12 @@ mod tests {
     #[test]
     fn the_transmitter_takes_a_byte_exactly_when_ready_and_never_waits() {
         let peripherals = init();
-        let (_rx, mut tx) = console(peripherals.USB_DEVICE);
+        let (_rx, mut tx) = console(
+            peripherals.USB_DEVICE,
+            peripherals.GPIO14,
+            peripherals.GPIO13,
+        )
+        .unwrap();
         let start = Instant::now();
         for _ in 0..1000 {
             if tx.write_ready().unwrap() {

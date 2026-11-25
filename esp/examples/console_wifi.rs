@@ -41,7 +41,10 @@ async fn main(spawner: Spawner) {
         net.with_iperf(rx, tx, work)
     };
     defmt::info!("console firmware, boot {}", boot);
-    let (rx, tx) = embassy::console(peripherals.USB_DEVICE);
+    let (dp, dm) = usb_pins!(peripherals);
+    let Ok((rx, tx)) = embassy::console(peripherals.USB_DEVICE, dp, dm) else {
+        defmt::panic!("USB Serial/JTAG did not start");
+    };
     let config = Config {
         name: NAME,
         boot,

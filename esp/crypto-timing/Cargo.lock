@@ -516,7 +516,7 @@ checksum = "b0641612053b2f34fc250bb63f6630ae75de46e02ade7f457268447081d709ce"
 dependencies = [
  "embassy-futures",
  "embassy-hal-internal",
- "embassy-sync 0.8.0",
+ "embassy-sync",
  "embedded-hal 0.2.7",
  "embedded-hal 1.0.0",
  "embedded-hal-async",
@@ -551,34 +551,6 @@ checksum = "524eb3c489760508f71360112bca70f6e53173e6fe48fc5f0efd0f5ab217751d"
 
 [[package]]
 name = "embassy-sync"
-version = "0.6.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8d2c8cdff05a7a51ba0087489ea44b0b1d97a296ca6b1d6d1a33ea7423d34049"
-dependencies = [
- "cfg-if",
- "critical-section",
- "embedded-io-async 0.6.1",
- "futures-sink",
- "futures-util",
- "heapless 0.8.0",
-]
-
-[[package]]
-name = "embassy-sync"
-version = "0.7.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "73974a3edbd0bd286759b3d483540f0ebef705919a5f56f4fc7709066f71689b"
-dependencies = [
- "cfg-if",
- "critical-section",
- "embedded-io-async 0.6.1",
- "futures-core",
- "futures-sink",
- "heapless 0.8.0",
-]
-
-[[package]]
-name = "embassy-sync"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7bbd85cf5a5ae56bdf26f618364af642d1d0a4e245cdd75cd9aabda382f65a81"
@@ -589,7 +561,7 @@ dependencies = [
  "embedded-io-async 0.7.0",
  "futures-core",
  "futures-sink",
- "heapless 0.9.3",
+ "heapless",
 ]
 
 [[package]]
@@ -634,7 +606,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6efd0c0e0b21bcf91b475b8fa47347c1df32c9a99728ae1e1b0e6625862dfd1a"
 dependencies = [
  "critical-section",
- "embassy-sync 0.8.0",
+ "embassy-sync",
  "embassy-time",
  "embassy-usb-driver",
  "portable-atomic",
@@ -789,7 +761,7 @@ checksum = "00d174d5400e5e8fd687ad1049e2f578285fa914201b1af7e8b112a4546bd826"
 [[package]]
 name = "esp-alloc"
 version = "0.11.0"
-source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
+source = "git+https://github.com/latesr/esp-hal?rev=1cd5096724d05bb1e739ed2a0bc0231c3df8d467#1cd5096724d05bb1e739ed2a0bc0231c3df8d467"
 dependencies = [
  "allocator-api2",
  "document-features",
@@ -804,7 +776,7 @@ dependencies = [
 [[package]]
 name = "esp-bootloader-esp-idf"
 version = "0.6.0"
-source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
+source = "git+https://github.com/latesr/esp-hal?rev=1cd5096724d05bb1e739ed2a0bc0231c3df8d467#1cd5096724d05bb1e739ed2a0bc0231c3df8d467"
 dependencies = [
  "document-features",
  "esp-config",
@@ -820,7 +792,7 @@ dependencies = [
 [[package]]
 name = "esp-config"
 version = "0.8.0"
-source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
+source = "git+https://github.com/latesr/esp-hal?rev=1cd5096724d05bb1e739ed2a0bc0231c3df8d467#1cd5096724d05bb1e739ed2a0bc0231c3df8d467"
 dependencies = [
  "document-features",
  "esp-metadata-generated",
@@ -832,7 +804,7 @@ dependencies = [
 [[package]]
 name = "esp-hal"
 version = "1.2.0"
-source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
+source = "git+https://github.com/latesr/esp-hal?rev=1cd5096724d05bb1e739ed2a0bc0231c3df8d467#1cd5096724d05bb1e739ed2a0bc0231c3df8d467"
 dependencies = [
  "bitfield",
  "bytemuck",
@@ -845,7 +817,7 @@ dependencies = [
  "embassy-embedded-hal",
  "embassy-futures",
  "embassy-net-driver",
- "embassy-sync 0.8.0",
+ "embassy-sync",
  "embassy-usb-driver",
  "embassy-usb-synopsys-otg",
  "embedded-can",
@@ -875,6 +847,7 @@ dependencies = [
  "esp32s3",
  "esp32s31",
  "fugit",
+ "ghash",
  "instability",
  "nb 1.1.0",
  "paste",
@@ -896,7 +869,7 @@ dependencies = [
 [[package]]
 name = "esp-hal-procmacros"
 version = "0.23.0"
-source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
+source = "git+https://github.com/latesr/esp-hal?rev=1cd5096724d05bb1e739ed2a0bc0231c3df8d467#1cd5096724d05bb1e739ed2a0bc0231c3df8d467"
 dependencies = [
  "document-features",
  "proc-macro-crate",
@@ -909,12 +882,12 @@ dependencies = [
 [[package]]
 name = "esp-metadata-generated"
 version = "0.6.0"
-source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
+source = "git+https://github.com/latesr/esp-hal?rev=1cd5096724d05bb1e739ed2a0bc0231c3df8d467#1cd5096724d05bb1e739ed2a0bc0231c3df8d467"
 
 [[package]]
 name = "esp-riscv-rt"
 version = "0.15.0"
-source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
+source = "git+https://github.com/latesr/esp-hal?rev=1cd5096724d05bb1e739ed2a0bc0231c3df8d467#1cd5096724d05bb1e739ed2a0bc0231c3df8d467"
 dependencies = [
  "defmt 1.2.0",
  "document-features",
@@ -925,7 +898,7 @@ dependencies = [
 [[package]]
 name = "esp-rom-sys"
 version = "0.1.5"
-source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
+source = "git+https://github.com/latesr/esp-hal?rev=1cd5096724d05bb1e739ed2a0bc0231c3df8d467#1cd5096724d05bb1e739ed2a0bc0231c3df8d467"
 dependencies = [
  "document-features",
  "esp-metadata-generated",
@@ -935,22 +908,20 @@ dependencies = [
 [[package]]
 name = "esp-sync"
 version = "0.3.0"
-source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
+source = "git+https://github.com/latesr/esp-hal?rev=1cd5096724d05bb1e739ed2a0bc0231c3df8d467#1cd5096724d05bb1e739ed2a0bc0231c3df8d467"
 dependencies = [
  "defmt 1.2.0",
  "document-features",
- "embassy-sync 0.6.2",
- "embassy-sync 0.7.2",
- "embassy-sync 0.8.0",
+ "embassy-sync",
+ "esp-hal-procmacros",
  "esp-metadata-generated",
  "riscv",
- "xtensa-lx",
 ]
 
 [[package]]
 name = "esp32"
 version = "0.42.0"
-source = "git+https://github.com/esp-rs/esp-pacs.git?rev=61f9678#61f9678dd039f76d692aac19f42be8c0bf0457e7"
+source = "git+https://github.com/esp-rs/esp-pacs.git?rev=0ea555f#0ea555f54390b64b5708a6629e7ee8ede66ac4c8"
 dependencies = [
  "defmt 1.2.0",
  "vcell",
@@ -959,7 +930,7 @@ dependencies = [
 [[package]]
 name = "esp32c2"
 version = "0.31.0"
-source = "git+https://github.com/esp-rs/esp-pacs.git?rev=61f9678#61f9678dd039f76d692aac19f42be8c0bf0457e7"
+source = "git+https://github.com/esp-rs/esp-pacs.git?rev=0ea555f#0ea555f54390b64b5708a6629e7ee8ede66ac4c8"
 dependencies = [
  "defmt 1.2.0",
  "vcell",
@@ -968,7 +939,7 @@ dependencies = [
 [[package]]
 name = "esp32c3"
 version = "0.34.0"
-source = "git+https://github.com/esp-rs/esp-pacs.git?rev=61f9678#61f9678dd039f76d692aac19f42be8c0bf0457e7"
+source = "git+https://github.com/esp-rs/esp-pacs.git?rev=0ea555f#0ea555f54390b64b5708a6629e7ee8ede66ac4c8"
 dependencies = [
  "defmt 1.2.0",
  "vcell",
@@ -977,7 +948,7 @@ dependencies = [
 [[package]]
 name = "esp32c5"
 version = "0.4.0"
-source = "git+https://github.com/esp-rs/esp-pacs.git?rev=61f9678#61f9678dd039f76d692aac19f42be8c0bf0457e7"
+source = "git+https://github.com/esp-rs/esp-pacs.git?rev=0ea555f#0ea555f54390b64b5708a6629e7ee8ede66ac4c8"
 dependencies = [
  "defmt 1.2.0",
  "vcell",
@@ -986,7 +957,7 @@ dependencies = [
 [[package]]
 name = "esp32c6"
 version = "0.25.0"
-source = "git+https://github.com/esp-rs/esp-pacs.git?rev=61f9678#61f9678dd039f76d692aac19f42be8c0bf0457e7"
+source = "git+https://github.com/esp-rs/esp-pacs.git?rev=0ea555f#0ea555f54390b64b5708a6629e7ee8ede66ac4c8"
 dependencies = [
  "defmt 1.2.0",
  "vcell",
@@ -995,7 +966,7 @@ dependencies = [
 [[package]]
 name = "esp32c61"
 version = "0.5.0"
-source = "git+https://github.com/esp-rs/esp-pacs.git?rev=61f9678#61f9678dd039f76d692aac19f42be8c0bf0457e7"
+source = "git+https://github.com/esp-rs/esp-pacs.git?rev=0ea555f#0ea555f54390b64b5708a6629e7ee8ede66ac4c8"
 dependencies = [
  "defmt 1.2.0",
  "vcell",
@@ -1004,7 +975,7 @@ dependencies = [
 [[package]]
 name = "esp32h2"
 version = "0.21.0"
-source = "git+https://github.com/esp-rs/esp-pacs.git?rev=61f9678#61f9678dd039f76d692aac19f42be8c0bf0457e7"
+source = "git+https://github.com/esp-rs/esp-pacs.git?rev=0ea555f#0ea555f54390b64b5708a6629e7ee8ede66ac4c8"
 dependencies = [
  "defmt 1.2.0",
  "vcell",
@@ -1013,7 +984,7 @@ dependencies = [
 [[package]]
 name = "esp32h4"
 version = "0.1.0"
-source = "git+https://github.com/esp-rs/esp-pacs.git?rev=61f9678#61f9678dd039f76d692aac19f42be8c0bf0457e7"
+source = "git+https://github.com/esp-rs/esp-pacs.git?rev=0ea555f#0ea555f54390b64b5708a6629e7ee8ede66ac4c8"
 dependencies = [
  "defmt 1.2.0",
  "vcell",
@@ -1022,7 +993,7 @@ dependencies = [
 [[package]]
 name = "esp32p4"
 version = "0.4.0"
-source = "git+https://github.com/esp-rs/esp-pacs.git?rev=61f9678#61f9678dd039f76d692aac19f42be8c0bf0457e7"
+source = "git+https://github.com/esp-rs/esp-pacs.git?rev=0ea555f#0ea555f54390b64b5708a6629e7ee8ede66ac4c8"
 dependencies = [
  "critical-section",
  "defmt 0.3.101",
@@ -1032,7 +1003,7 @@ dependencies = [
 [[package]]
 name = "esp32s2"
 version = "0.33.0"
-source = "git+https://github.com/esp-rs/esp-pacs.git?rev=61f9678#61f9678dd039f76d692aac19f42be8c0bf0457e7"
+source = "git+https://github.com/esp-rs/esp-pacs.git?rev=0ea555f#0ea555f54390b64b5708a6629e7ee8ede66ac4c8"
 dependencies = [
  "defmt 1.2.0",
  "vcell",
@@ -1041,7 +1012,7 @@ dependencies = [
 [[package]]
 name = "esp32s3"
 version = "0.37.0"
-source = "git+https://github.com/esp-rs/esp-pacs.git?rev=61f9678#61f9678dd039f76d692aac19f42be8c0bf0457e7"
+source = "git+https://github.com/esp-rs/esp-pacs.git?rev=0ea555f#0ea555f54390b64b5708a6629e7ee8ede66ac4c8"
 dependencies = [
  "defmt 1.2.0",
  "vcell",
@@ -1050,7 +1021,7 @@ dependencies = [
 [[package]]
 name = "esp32s31"
 version = "0.3.0"
-source = "git+https://github.com/esp-rs/esp-pacs.git?rev=61f9678#61f9678dd039f76d692aac19f42be8c0bf0457e7"
+source = "git+https://github.com/esp-rs/esp-pacs.git?rev=0ea555f#0ea555f54390b64b5708a6629e7ee8ede66ac4c8"
 dependencies = [
  "critical-section",
  "defmt 1.2.0",
@@ -1102,23 +1073,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1944426bf7d03f1d14f708785e4b33efd750b36d48a157b836b3efc15ede8e1d"
 
 [[package]]
-name = "futures-task"
-version = "0.3.34"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd417de3d1d015fc3bfd2b1ea46dfc7bab72ef86f1cc7cc9c78e728b34a6d1fd"
-
-[[package]]
-name = "futures-util"
-version = "0.3.34"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0d50a92467f8ba5dd6e3ee5d4bd04d73ab2e4e1c44474a0674821dfce14b79bc"
-dependencies = [
- "futures-core",
- "futures-task",
- "pin-project-lite",
-]
-
-[[package]]
 name = "gcd"
 version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1132,6 +1086,16 @@ checksum = "85649ca51fd72272d7821adaf274ad91c288277713d9c18820d8499a7ff69e9a"
 dependencies = [
  "typenum",
  "version_check",
+]
+
+[[package]]
+name = "ghash"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2eecf2d5dc9b66b732b97707a0210906b1d30523eb773193ab777c0c84b3e8d5"
+dependencies = [
+ "polyval",
+ "zeroize",
 ]
 
 [[package]]
@@ -1159,16 +1123,6 @@ name = "hashbrown"
 version = "0.17.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ed5909b6e89a2db4456e54cd5f673791d7eca6732202bbf2a9cc504fe2f9b84a"
-
-[[package]]
-name = "heapless"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0bfb9eb618601c89945a70e254898da93b13be0388091d42117462b265bb3fad"
-dependencies = [
- "hash32",
- "stable_deref_trait",
-]
 
 [[package]]
 name = "heapless"
@@ -1399,12 +1353,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "pin-project-lite"
-version = "0.2.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a89322df9ebe1c1578d689c92318e070967d1042b512afbe49518723f4e6d5cd"
-
-[[package]]
 name = "pkcs1"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1422,6 +1370,18 @@ checksum = "451913da69c775a56034ea8d9003d27ee8948e12443eae7c038ba100a4f21cb7"
 dependencies = [
  "der",
  "spki",
+]
+
+[[package]]
+name = "polyval"
+version = "0.7.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f0fa31d631f2b2cb2a544d0aa321ce847a94764d701ca2becc411138b93d49cd"
+dependencies = [
+ "cpubits",
+ "cpufeatures",
+ "universal-hash",
+ "zeroize",
 ]
 
 [[package]]
@@ -1968,6 +1928,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "universal-hash"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f4987bdc12753382e0bec4a65c50738ffaabc998b9cdd1f952fb5f39b0048a96"
+dependencies = [
+ "crypto-common 0.2.2",
+ "ctutils",
+]
+
+[[package]]
 name = "unsafe-libyaml"
 version = "0.2.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2060,7 +2030,7 @@ dependencies = [
 [[package]]
 name = "xtensa-lx"
 version = "0.13.0"
-source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
+source = "git+https://github.com/latesr/esp-hal?rev=1cd5096724d05bb1e739ed2a0bc0231c3df8d467#1cd5096724d05bb1e739ed2a0bc0231c3df8d467"
 dependencies = [
  "critical-section",
 ]
@@ -2068,7 +2038,7 @@ dependencies = [
 [[package]]
 name = "xtensa-lx-rt"
 version = "0.23.0"
-source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
+source = "git+https://github.com/latesr/esp-hal?rev=1cd5096724d05bb1e739ed2a0bc0231c3df8d467#1cd5096724d05bb1e739ed2a0bc0231c3df8d467"
 dependencies = [
  "defmt 1.2.0",
  "document-features",
@@ -2079,7 +2049,7 @@ dependencies = [
 [[package]]
 name = "xtensa-lx-rt-proc-macros"
 version = "0.5.0"
-source = "git+https://github.com/latesr/esp-hal?rev=828059d4276ed62b48f2e95a04106fc89fda17a0#828059d4276ed62b48f2e95a04106fc89fda17a0"
+source = "git+https://github.com/latesr/esp-hal?rev=1cd5096724d05bb1e739ed2a0bc0231c3df8d467#1cd5096724d05bb1e739ed2a0bc0231c3df8d467"
 dependencies = [
  "proc-macro2",
  "quote",

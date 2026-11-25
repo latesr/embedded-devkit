@@ -225,9 +225,9 @@ mcu>
 | `mcu-console-perf` | x86_64 and aarch64 hosts, `riscv32imac-unknown-none-elf`, `thumbv7em-none-eabihf`, `thumbv6m-none-eabi` | 1.91 |
 | `mcu-run` | x86_64 and aarch64 hosts, on macOS and Linux | 1.95 |
 | `mcu-scenario` | x86_64 and aarch64 hosts, on macOS and Linux | 1.95 |
-| `embedded-devkit-esp` | The target of each ESP32 board crate | 1.95 |
-| `embedded-devkit-esp32-c5-devkitc-1` | `riscv32imac-unknown-none-elf` | 1.95 |
-| `embedded-devkit-esp32-s31-function-coreboard-1` | `riscv32imafc-unknown-none-elf` | 1.95 |
+| `embedded-devkit-esp` | The target of each ESP32 board crate | 1.100 |
+| `embedded-devkit-esp32-c5-devkitc-1` | `riscv32imac-unknown-none-elf` | 1.100 |
+| `embedded-devkit-esp32-s31-function-coreboard-1` | `riscv32imafc-unknown-none-elf` | 1.100 |
 | `embedded-devkit-nucleo-h7s3l8` | `thumbv7em-none-eabihf` | 1.91 |
 
 A crate that goes into an application takes the lowest MSRV its dependencies allow. A host tool's MSRV does not limit any application's.
