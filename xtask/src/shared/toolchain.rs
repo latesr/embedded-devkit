@@ -9,11 +9,11 @@ use std::process::Command;
 
 /// The stable toolchain that every `rust-toolchain.toml` names. It moves with [`NIGHTLY`] when a new stable is
 /// released.
-pub const STABLE: &str = "1.99.0";
+pub const STABLE: &str = "1.100.0";
 
 /// The nightly that the fuzzer and `-Zbuild-std` builds use, as rustup names it. Pass it as
 /// `format!("+{NIGHTLY}")`. It moves with [`STABLE`].
-pub const NIGHTLY: &str = "nightly-2026-10-11";
+pub const NIGHTLY: &str = "nightly-2026-11-24";
 
 /// Fails when a `rust-toolchain.toml` in the repo names a channel other than [`STABLE`], or when a CI workflow
 /// installs or runs a nightly other than [`NIGHTLY`].
